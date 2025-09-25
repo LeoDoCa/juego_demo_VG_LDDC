@@ -6,6 +6,9 @@ public class CharacterMovement : MonoBehaviour
     private CharacterController controller;
     public Transform cameraTransform;
     private float gravity;
+    public float speed = 5f;
+    public float rotationSpeed = 10f;
+    public float jumpForce = 5f;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -14,11 +17,15 @@ public class CharacterMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (controller.isGrounded)
         {
-            gravity = Physics.gravity.y * Time.deltaTime;
+            gravity = Physics.gravity.y;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                gravity = jumpForce;
+            }
         }
         else
         {
@@ -32,6 +39,14 @@ public class CharacterMovement : MonoBehaviour
         var cameraForward = new Vector3(cameraTransform.forward.x, 0, cameraTransform.forward.z);
         var cameraRight = new Vector3(cameraTransform.right.x, 0, cameraTransform.right.z);
         var direction = cameraForward * vertical + cameraRight * horizontal;
-        controller.Move((direction.normalized + gravityVector) * Time.deltaTime);
+        controller.Move((direction.normalized * speed + gravityVector) * Time.deltaTime);
+
+        if (direction != Vector3.zero)
+        {
+            var targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        }
+        
+        
     }
 }

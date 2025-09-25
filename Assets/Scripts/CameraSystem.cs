@@ -13,7 +13,7 @@ public class CameraSystem : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         Vector3 direction = (spaceship.position - cameraObject.position).normalized;
         
