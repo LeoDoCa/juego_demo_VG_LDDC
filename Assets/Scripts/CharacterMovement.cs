@@ -3,12 +3,17 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class CharacterMovement : MonoBehaviour
 {
+    /*-----Variables de movimiento-----*/
     private CharacterController controller;
     public Transform cameraTransform;
     private float gravity;
     public float speed = 5f;
     public float rotationSpeed = 10f;
     public float jumpForce = 5f;
+    
+    /*-----Variables de animación-----*/
+    public Animator animator;
+    private readonly int moveSpeedHash = Animator.StringToHash("moveSpeed");
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -47,6 +52,12 @@ public class CharacterMovement : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
         
-        
+        /*-----Código de animación del personaje-----*/
+        // direction = x, y, z
+        // direction.normalized.magnitude
+        var moveSpeedValue = direction.normalized.magnitude;
+        animator.SetFloat(moveSpeedHash, moveSpeedValue);
     }
+    
+    
 }
