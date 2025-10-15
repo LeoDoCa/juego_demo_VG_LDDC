@@ -13,7 +13,7 @@ public class Turret : MonoBehaviour
     
     IEnumerator Start()
     {
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 20; i++)
         {
             var instance = Instantiate(bulletPrefab, bulletPool);
             bullets.Add(instance.GetComponent<Bullet>());
@@ -29,7 +29,7 @@ public class Turret : MonoBehaviour
                 available.transform.position = firePoint.position;
                 available.direction = firePoint.up;
             }
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.3f);
         }
     }
     
