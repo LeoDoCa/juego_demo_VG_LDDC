@@ -2,37 +2,43 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NPC : MonoBehaviour
+public class NPC : MonoBehaviour, IStateMachine
 {
-    private NavMeshAgent  agent;
+    public IState CurrentState { get; set; }
+    
+    public NavMeshAgent  agent;
     public Transform destination;
     private Collider[] detectedObjects =  new Collider[10];
     public float detectionRadius = 10f;
-    private Transform player;
+    public Transform player;
+
+    public bool isPlayerSighted;
+    [Header("Patrolling State Variables")]
+    public Transform[] waypoints;
     
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        agent.destination = destination.position;
+        ChangeState(new PatrollingState(this));
     }
 
     private void FixedUpdate()
     {
         var numberOfColliders = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, detectedObjects);
-        player = null;
+        isPlayerSighted = false;
         for (int i = 0; i < numberOfColliders; i++)
         {
             var col = detectedObjects[i];
-            if (!col.CompareTag("Player")) continue;
+            if (!col.CompareTag("Player")) continue; // Filtro 1
             player = col.transform;
             var vectorToPlayer = player.position - transform.position;
             var dot = Vector3.Dot(vectorToPlayer, transform.forward);
-            if (dot < 0) continue;
+            if (dot < 0) continue; // Filtro 2
             
             Physics.Raycast(transform.position, vectorToPlayer, out var hit);
-            if (hit.collider.transform != player) continue;
+            if (hit.collider.transform != player) continue; // Filtro 3
             
-            agent.destination = player.position;
+            isPlayerSighted = true;
         }
     }
 
@@ -44,6 +50,38 @@ public class NPC : MonoBehaviour
 
     void Update()
     {
-        
+        CurrentState?.Tick(Time.deltaTime);
+    }
+    
+    public void ChangeState(IState newState)
+    {
+        CurrentState?.Exit();
+        CurrentState = newState;
+        CurrentState?.Enter();
+    }
+    
+}
+
+public struct PatrollingState : IState
+{
+    public NPC StateMachine { get; set; }
+    
+    public PatrollingState(NPC stateMachine)
+    {
+        StateMachine = stateMachine;
+    }
+    
+    public void Enter()
+    {
+        if (StateMachine.waypoints.Length == 0) return;
+            StateMachine.agent.destination = StateMachine.waypoints[0].position;
+    }
+
+    public void Tick(float deltaTime)
+    {
+    }
+
+    public void Exit()
+    {
     }
 }

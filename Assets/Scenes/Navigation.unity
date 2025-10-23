@@ -563,6 +563,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1185734434}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &280280424
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 280280425}
+  m_Layer: 0
+  m_Name: WP1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &280280425
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280280424}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 11.37, y: 0, z: 12.53}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &294945452
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1102,8 +1133,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1493c777e5dd9cc48a98ba51500ad4bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC
+  agent: {fileID: 0}
   destination: {fileID: 1495472033}
   detectionRadius: 10
+  player: {fileID: 0}
+  isPlayerSighted: 0
+  waypoints: []
 --- !u!1 &670257484
 GameObject:
   m_ObjectHideFlags: 0
@@ -2392,8 +2427,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1493c777e5dd9cc48a98ba51500ad4bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPC
+  agent: {fileID: 0}
   destination: {fileID: 1495472033}
   detectionRadius: 10
+  player: {fileID: 0}
+  isPlayerSighted: 0
+  waypoints:
+  - {fileID: 280280425}
 --- !u!195 &1619913896
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2940,3 +2980,4 @@ SceneRoots:
   - {fileID: 294945452}
   - {fileID: 1938158728}
   - {fileID: 408834471}
+  - {fileID: 280280425}

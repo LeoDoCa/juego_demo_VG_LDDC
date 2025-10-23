@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CubeStateMachine : MonoBehaviour, IStateMachine
@@ -29,6 +30,7 @@ public struct IdleState : IState
     {
         if (Input.GetKeyDown(KeyCode.Space)) StateMachine.ChangeState(new RotatingState(StateMachine));
         if (Input.GetKeyDown(KeyCode.M)) StateMachine.ChangeState(new MovingState(StateMachine));
+        if (Input.GetKeyDown(KeyCode.D)) StateMachine.ChangeState(new DuplicateState(StateMachine));
     }
 
     public void Exit() => Debug.Log("Exit Idle State");
@@ -79,6 +81,39 @@ public struct MovingState : IState
     public void Exit()
     {
         Debug.Log("Exit Moving State");
+    }
+}
+
+public class DuplicateState : IState
+{
+    public CubeStateMachine StateMachine { get; set; }
+    private GameObject duplicate;
+
+    public DuplicateState(CubeStateMachine stateMachine)
+    {
+        StateMachine = stateMachine;
+    }
+
+    public void Enter()
+    {
+        Debug.Log("Enter Duplicate State");
+
+        Vector3 newPos = StateMachine.transform.position + new Vector3(0, 2f, 0);
+        duplicate = GameObject.Instantiate(StateMachine.gameObject, newPos, StateMachine.transform.rotation);
+    }
+
+    public void Tick(float deltaTime)
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+            StateMachine.ChangeState(new IdleState(StateMachine));
+    }
+
+    public void Exit()
+    {
+        Debug.Log("Exit Duplicate State");
+
+        if (duplicate)
+            GameObject.Destroy(duplicate);
     }
 }
 
